@@ -11,6 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { forecast5d } from "../api";
 import { MosquitoCard } from "./mosquito-card";
 import useEmblaCarousel from "embla-carousel-react";
+import { makeStyles } from "tss-react/mui";
 
 const mosquitoLevelToImage = new Map([
   [0, level1],
@@ -20,9 +21,22 @@ const mosquitoLevelToImage = new Map([
   [4, level5],
 ]);
 
-export const Main: React.FC = () => {
-  const [cityKey, setCityKey] = useState<string>("");
+const useStyles = makeStyles()((theme) => ({
+  container: {
+    width: 600,
+    [theme.breakpoints.down("lg")]: {
+      width: "100%",
+    },
+    height: "100%",
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+}));
 
+export const Main: React.FC = () => {
+  const { classes } = useStyles();
+
+  const [cityKey, setCityKey] = useState<string>("");
   const [selectedDay, setSelectedDay] = useState(0);
 
   const {
@@ -47,7 +61,7 @@ export const Main: React.FC = () => {
   const slideSpacing = "1rem";
 
   return (
-    <Container maxWidth="xs" sx={{ padding: 2, height: "100%" }}>
+    <Container className={classes.container}>
       <Stack
         direction="column"
         flexWrap="nowrap"
@@ -62,6 +76,7 @@ export const Main: React.FC = () => {
           backgroundRepeat: "no-repeat",
         }}
         height="100%"
+        width="100%"
         borderRadius={2}
       >
         <Stack gap={2} mt={2}>
