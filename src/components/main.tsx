@@ -1,4 +1,4 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Chip, Container, Stack, Typography } from "@mui/material";
 import level1 from "../assets/mosquito-levels/1.gif";
 import level2 from "../assets/mosquito-levels/2.gif";
 import level3 from "../assets/mosquito-levels/3.gif";
@@ -51,6 +51,7 @@ export const Main: React.FC = () => {
     forecastMutation(cityKey);
   }, [cityKey]);
 
+  const selectedForecast = forecastData?.forecast?.[selectedDay];
   return (
     <Container className={classes.container}>
       <Stack
@@ -60,7 +61,7 @@ export const Main: React.FC = () => {
         alignItems="center"
         sx={{
           backgroundImage: `url(${mosquitoLevelToImage.get(
-            forecastData?.forecast?.[selectedDay].value ?? 0
+            selectedForecast?.value ?? 0
           )})`,
           backgroundPosition: "center",
           backgroundSize: "cover",
@@ -70,10 +71,15 @@ export const Main: React.FC = () => {
         width="100%"
         borderRadius={2}
       >
-        <Stack gap={2} mt={2} alignItems="center" justifyContent="flex-start">
-          <Typography variant="h4">Mosquito Forecast</Typography>
+        <Stack gap={4} mt={10} alignItems="center" justifyContent="flex-start">
           <SearchAutocomplete onChange={setCityKey} />
           {!!isForecastPending && <CircularProgress />}
+          {!!selectedForecast && (
+            <Stack gap={1}>
+              <Chip label={selectedForecast.category} />
+              <Chip label={`Level ${selectedForecast.value}`} />
+            </Stack>
+          )}
         </Stack>
 
         <Box width="97%" p={1}>

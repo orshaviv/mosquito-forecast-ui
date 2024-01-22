@@ -3,7 +3,7 @@ import { Forecast } from "../api";
 import useEmblaCarousel from "embla-carousel-react";
 import { Dispatch } from "react";
 import { makeStyles } from "tss-react/mui";
-import { Card, CardActions, Divider, Link, Typography } from "@mui/material";
+import { Card, CardActions, Chip, Divider, Typography } from "@mui/material";
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -39,17 +39,17 @@ const MosquitoCard: React.FC<{
 
   return (
     <Card onClick={onClick} className={classes.card}>
-      <Typography>{date}</Typography>
-      <Typography>{days[day]}</Typography>
+      <Typography>
+        {date} {days[day]}
+      </Typography>
       <Divider orientation="horizontal" />
 
-      <Typography variant="subtitle1">{forecast.value}</Typography>
-      <Typography variant="subtitle1">{forecast.category}</Typography>
-      <CardActions>
-        <Link href="#" onClick={() => window.alert("Loser!")}>
-          More Info
-        </Link>
-      </CardActions>
+      <Stack gap={1} mt={1}>
+        <Chip label={forecast.category} />
+        <Chip label={`Level ${forecast.value}`} />
+      </Stack>
+
+      <CardActions>{/* TBD */}</CardActions>
     </Card>
   );
 };
