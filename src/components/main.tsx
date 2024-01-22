@@ -1,4 +1,4 @@
-import { Box, Chip, Container, Stack, Typography } from "@mui/material";
+import { Box, Chip, Container, Stack } from "@mui/material";
 import level1 from "../assets/mosquito-levels/1.gif";
 import level2 from "../assets/mosquito-levels/2.gif";
 import level3 from "../assets/mosquito-levels/3.gif";
@@ -19,6 +19,10 @@ const mosquitoLevelToImage = new Map([
   [3, level4],
   [4, level5],
 ]);
+
+const getMosquitoLevelImage = (level: number) => {
+  return mosquitoLevelToImage.get(Math.min(level, 4));
+};
 
 const useStyles = makeStyles()((theme) => ({
   container: {
@@ -60,7 +64,7 @@ export const Main: React.FC = () => {
         justifyContent="space-between"
         alignItems="center"
         sx={{
-          backgroundImage: `url(${mosquitoLevelToImage.get(
+          backgroundImage: `url(${getMosquitoLevelImage(
             selectedForecast?.value ?? 0
           )})`,
           backgroundPosition: "center",

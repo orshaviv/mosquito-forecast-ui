@@ -8,7 +8,7 @@ export interface CitiesResponse {
 }
 
 interface SearchCitiesResponse {
-  cities: CitiesResponse[];
+  citiesKey: CitiesResponse[];
 }
 
 export const searchCities = async (
@@ -18,7 +18,7 @@ export const searchCities = async (
   // await new Promise((resolve) => setTimeout(resolve, 1000));
 
   // return {
-  //   cities: [
+  //   citiesKey: [
   //     {
   //       key: "215854",
   //       city: "Tel Aviv",

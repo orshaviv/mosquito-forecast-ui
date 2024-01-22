@@ -28,7 +28,7 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
   } = useMutation({
     mutationFn: searchCities,
     onSuccess: (data) => {
-      setOptions(data.cities);
+      setOptions(data.citiesKey);
     },
   });
 
