@@ -44,7 +44,7 @@ export const searchCities = async (
 
 type Category = "Low" | "Moderate" | "High";
 
-interface ForecastResponse {
+export interface Forecast {
   name: string;
   localDateTime: string;
   epochDateTime: number;
@@ -56,7 +56,7 @@ interface ForecastResponse {
 
 export const forecast5d = async (
   cityKey: string
-): Promise<{ forecast: ForecastResponse[] }> => {
+): Promise<{ forecast: Forecast[] }> => {
   // TODO: Remove mock
   await new Promise((resolve) => setTimeout(resolve, 1000));
 

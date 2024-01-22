@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect, Dispatch } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,7 +12,7 @@ interface Item {
 }
 
 interface SearchAutocompleteProps {
-  onChange: (key: string) => void;
+  onChange: Dispatch<string>;
 }
 
 export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
@@ -31,6 +31,16 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
       setOptions(data.cities);
     },
   });
+
+  const [inputValue, setInputValue] = React.useState("");
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (inputValue?.length < 3) return;
+      searchCityKeyMutation(inputValue);
+    }, 600);
+    return () => clearTimeout(timeoutId);
+  }, [inputValue, onChange]);
 
   return (
     <Autocomplete
@@ -64,9 +74,7 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
                 {params.InputProps.endAdornment}
               </Fragment>
             ),
-            onChange: (event) => {
-              searchCityKeyMutation(event.target.value);
-            },
+            onChange: (event) => setInputValue(event.target.value),
           }}
         />
       )}
