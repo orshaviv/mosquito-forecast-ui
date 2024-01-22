@@ -1,6 +1,7 @@
 import { Main } from "./components/main";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { styled } from "@mui/material/styles";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 
@@ -13,6 +14,7 @@ const AppComponent = styled("div")({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <AppComponent>
         <Main />
       </AppComponent>

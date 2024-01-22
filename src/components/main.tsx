@@ -5,8 +5,8 @@ import level3 from "../assets/mosquito-levels/3.gif";
 import level4 from "../assets/mosquito-levels/4.gif";
 import level5 from "../assets/mosquito-levels/5.gif";
 import { SearchAutocomplete } from "./search-autocomplete";
-import { useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { forecast5d } from "../api";
 import { makeStyles } from "tss-react/mui";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -42,18 +42,12 @@ export const Main: React.FC = () => {
   const [cityKey, setCityKey] = useState("");
   const [selectedDay, setSelectedDay] = useState(0);
 
-  const {
-    mutate: forecastMutation,
-    data: forecastData,
-    isPending: isForecastPending,
-  } = useMutation({
-    mutationFn: forecast5d,
+  const { data: forecastData, isFetching: isForecastFetching } = useQuery({
+    queryKey: ["forecast", cityKey],
+    queryFn: () => forecast5d(cityKey),
+    enabled: !!cityKey,
+    staleTime: 1000 * 60 * 60 * 12, // 12 hours
   });
-
-  useEffect(() => {
-    if (!cityKey) return;
-    forecastMutation(cityKey);
-  }, [cityKey]);
 
   const selectedForecast = forecastData?.forecast?.[selectedDay];
   return (
@@ -77,7 +71,7 @@ export const Main: React.FC = () => {
       >
         <Stack gap={4} mt={10} alignItems="center" justifyContent="flex-start">
           <SearchAutocomplete onChange={setCityKey} />
-          {!!isForecastPending && <CircularProgress />}
+          {!!isForecastFetching && <CircularProgress />}
           {!!selectedForecast && (
             <Stack gap={1}>
               <Chip label={selectedForecast.category} />
