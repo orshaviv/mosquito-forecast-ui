@@ -1,9 +1,4 @@
-import { Box, Chip, Container, Stack } from "@mui/material";
-import level1 from "../assets/mosquito-levels/1.gif";
-import level2 from "../assets/mosquito-levels/2.gif";
-import level3 from "../assets/mosquito-levels/3.gif";
-import level4 from "../assets/mosquito-levels/4.gif";
-import level5 from "../assets/mosquito-levels/5.gif";
+import { Box, Chip, Stack } from "@mui/material";
 import { SearchAutocomplete } from "./search-autocomplete";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -12,33 +7,44 @@ import { makeStyles } from "tss-react/mui";
 import CircularProgress from "@mui/material/CircularProgress";
 import { MosquitoCardsCarousel } from "./mosquito-cards-carousel";
 
+const cloudinaryBaseUri = "https://res.cloudinary.com/dptn7fuko/image/upload";
+
 const mosquitoLevelToImage = new Map([
-  [0, level1],
-  [1, level2],
-  [2, level3],
-  [3, level4],
-  [4, level5],
+  [0, `${cloudinaryBaseUri}/v1706006793/mosquito-levels/level-1.gif`],
+  [1, `${cloudinaryBaseUri}/v1706006795/mosquito-levels/level-2.gif`],
+  [2, `${cloudinaryBaseUri}/v1706006780/mosquito-levels/level-3.gif`],
+  [3, `${cloudinaryBaseUri}/v1706006790/mosquito-levels/level-4.gif`],
+  [4, `${cloudinaryBaseUri}/v1706006791/mosquito-levels/level-5.gif`],
 ]);
 
 const getMosquitoLevelImage = (level: number) => {
-  return mosquitoLevelToImage.get(Math.min(level, 4));
+  return mosquitoLevelToImage.get(Math.min(level, 4)) as string;
 };
 
-const useStyles = makeStyles()((theme) => ({
-  container: {
-    width: 600,
-    [theme.breakpoints.down("lg")]: {
-      width: "100%",
+const useStyles = makeStyles<{ backgroundImage: string }>()(
+  (theme, { backgroundImage }) => ({
+    container: {
+      display: "flex",
+      flexFlow: "column nowrap",
+      justifyContent: "space-between",
+      alignItems: "center",
+
+      width: 600,
+      [theme.breakpoints.down("lg")]: {
+        width: "100%",
+      },
+      height: "100vh",
+
+      backgroundImage: `url(${backgroundImage})`,
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      borderRadius: 2,
     },
-    height: "100%",
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-}));
+  })
+);
 
 export const Main: React.FC = () => {
-  const { classes } = useStyles();
-
   const [cityKey, setCityKey] = useState("");
   const [selectedDay, setSelectedDay] = useState(0);
 
@@ -50,44 +56,30 @@ export const Main: React.FC = () => {
   });
 
   const selectedForecast = forecastData?.forecast?.[selectedDay];
-  return (
-    <Container className={classes.container}>
-      <Stack
-        direction="column"
-        flexWrap="nowrap"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{
-          backgroundImage: `url(${getMosquitoLevelImage(
-            selectedForecast?.value ?? 0
-          )})`,
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
-        height="100%"
-        width="100%"
-        borderRadius={2}
-      >
-        <Stack gap={4} mt={10} alignItems="center" justifyContent="flex-start">
-          <SearchAutocomplete onChange={setCityKey} />
-          {!!isForecastFetching && <CircularProgress />}
-          {!!selectedForecast && (
-            <Stack gap={1}>
-              <Chip label={selectedForecast.category} />
-              <Chip label={`Level ${selectedForecast.value}`} />
-            </Stack>
-          )}
-        </Stack>
 
-        <Box width="97%" p={1}>
-          <MosquitoCardsCarousel
-            forecast={forecastData?.forecast ?? []}
-            selectedDay={selectedDay}
-            setSelectedDay={setSelectedDay}
-          />
-        </Box>
+  const { classes } = useStyles({
+    backgroundImage: getMosquitoLevelImage(selectedForecast?.value ?? 0),
+  });
+  return (
+    <Stack className={classes.container}>
+      <Stack gap={4} mt={10} alignItems="center" justifyContent="flex-start">
+        <SearchAutocomplete onChange={setCityKey} />
+        {!!isForecastFetching && <CircularProgress />}
+        {!!selectedForecast && (
+          <Stack gap={1}>
+            <Chip label={selectedForecast.category} />
+            <Chip label={`Level ${selectedForecast.value}`} />
+          </Stack>
+        )}
       </Stack>
-    </Container>
+
+      <Box width="97%" p={1}>
+        <MosquitoCardsCarousel
+          forecast={forecastData?.forecast ?? []}
+          selectedDay={selectedDay}
+          setSelectedDay={setSelectedDay}
+        />
+      </Box>
+    </Stack>
   );
 };
