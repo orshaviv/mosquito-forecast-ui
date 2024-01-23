@@ -46,7 +46,9 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
     <Autocomplete
       id="search-autocomplete"
       onChange={(_, value) => onChange(value?.key || "")}
-      sx={{ width: 300 }}
+      sx={{
+        width: "70%",
+      }}
       open={open}
       onOpen={() => {
         setOpen(true);

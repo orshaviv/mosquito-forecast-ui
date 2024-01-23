@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/system";
+import { Box, Stack } from "@mui/material";
 import { Forecast } from "../api";
 import useEmblaCarousel from "embla-carousel-react";
 import { Dispatch } from "react";

@@ -25,21 +25,25 @@ const useStyles = makeStyles<{ backgroundImage: string }>()(
   (theme, { backgroundImage }) => ({
     container: {
       display: "flex",
-      flexFlow: "column nowrap",
-      justifyContent: "space-between",
-      alignItems: "center",
-
-      width: 600,
-      [theme.breakpoints.down("lg")]: {
-        width: "100%",
-      },
+      justifyContent: "center",
       height: "100vh",
+    },
 
+    app: {
+      width: "100%",
+      [theme.breakpoints.up("sm")]: {
+        width: "40%",
+        maxWidth: 600,
+      },
+      height: "100%",
       backgroundImage: `url(${backgroundImage})`,
-      backgroundPosition: "center",
       backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       borderRadius: 2,
+
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
     },
   })
 );
@@ -61,25 +65,33 @@ export const Main: React.FC = () => {
     backgroundImage: getMosquitoLevelImage(selectedForecast?.value ?? 0),
   });
   return (
-    <Stack className={classes.container}>
-      <Stack gap={4} mt={10} alignItems="center" justifyContent="flex-start">
-        <SearchAutocomplete onChange={setCityKey} />
-        {!!isForecastFetching && <CircularProgress />}
-        {!!selectedForecast && (
-          <Stack gap={1}>
-            <Chip label={selectedForecast.category} />
-            <Chip label={`Level ${selectedForecast.value}`} />
-          </Stack>
-        )}
-      </Stack>
+    <Box className={classes.container}>
+      <Stack className={classes.app}>
+        <Stack
+          gap={4}
+          mt={10}
+          alignItems="center"
+          justifyContent="flex-start"
+          width="100%"
+        >
+          <SearchAutocomplete onChange={setCityKey} />
+          {!!isForecastFetching && <CircularProgress />}
+          {!!selectedForecast && (
+            <Stack gap={1}>
+              <Chip label={selectedForecast.category} />
+              <Chip label={`Level ${selectedForecast.value}`} />
+            </Stack>
+          )}
+        </Stack>
 
-      <Box width="97%" p={1}>
-        <MosquitoCardsCarousel
-          forecast={forecastData?.forecast ?? []}
-          selectedDay={selectedDay}
-          setSelectedDay={setSelectedDay}
-        />
-      </Box>
-    </Stack>
+        <Box width="97%" p={1}>
+          <MosquitoCardsCarousel
+            forecast={forecastData?.forecast ?? []}
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+          />
+        </Box>
+      </Stack>
+    </Box>
   );
 };
