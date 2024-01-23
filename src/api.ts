@@ -1,14 +1,21 @@
 const baseURL = "https://l0hw1mc2b6.execute-api.us-east-1.amazonaws.com/dev";
 
-export interface CitiesResponse {
+export interface City {
   key: string;
   type: string;
-  country: string;
-  city: string;
+  localizedName: string;
+  country: {
+    id: string;
+    localizedName: string;
+  };
+  administrativeArea: {
+    id: string;
+    localizedName: string;
+  };
 }
 
 interface SearchCitiesResponse {
-  citiesKey: CitiesResponse[];
+  cities: City[];
 }
 
 export const searchCities = async (
@@ -18,18 +25,32 @@ export const searchCities = async (
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return {
-    citiesKey: [
+    cities: [
       {
         key: "215854",
-        city: "Tel Aviv",
-        country: "Israel",
         type: "city",
+        localizedName: "Tel Aviv",
+        country: {
+          id: "IL",
+          localizedName: "Israel",
+        },
+        administrativeArea: {
+          id: "TA",
+          localizedName: "Tel Aviv",
+        },
       },
       {
         key: "123345",
-        city: "New York City",
-        country: "United States",
         type: "city",
+        localizedName: "New York",
+        country: {
+          id: "US",
+          localizedName: "United States",
+        },
+        administrativeArea: {
+          id: "NY",
+          localizedName: "New York",
+        },
       },
     ],
   };
@@ -38,6 +59,8 @@ export const searchCities = async (
     `${baseURL}/search-city?q=${encodeURIComponent(city)}`
   );
   const data = await res.json();
+
+  if (res.status !== 200) throw new Error(data);
 
   return data;
 };
@@ -118,7 +141,10 @@ export const forecast5d = async (
   const res = await fetch(
     `${baseURL}//forecast/5d/${encodeURIComponent(cityKey)}`
   );
+
   const data = await res.json();
+
+  if (res.status !== 200) throw new Error(data);
 
   return data;
 };

@@ -2,14 +2,8 @@ import React, { useState, Fragment, useEffect, Dispatch } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
-import { searchCities } from "../api";
+import { City, searchCities } from "../api";
 import { useMutation } from "@tanstack/react-query";
-
-interface Item {
-  key: string;
-  city: string;
-  country: string;
-}
 
 interface SearchAutocompleteProps {
   onChange: Dispatch<string>;
@@ -19,18 +13,18 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
   onChange,
 }) => {
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<readonly Item[]>([]);
+  const [options, setOptions] = useState<readonly City[]>([]);
 
-  const {
-    mutate: searchCityKeyMutation,
-    isSuccess: isSearchCityKeySuccess,
-    isPending: isSearchCityKeyPending,
-  } = useMutation({
-    mutationFn: searchCities,
-    onSuccess: (data) => {
-      setOptions(data.citiesKey);
-    },
-  });
+  const { mutate: searchCityKeyMutation, isPending: isSearchCityKeyPending } =
+    useMutation({
+      mutationFn: searchCities,
+      onSuccess: (data) => {
+        setOptions(data.cities);
+      },
+      onError: () => {
+        setOptions([]);
+      },
+    });
 
   const [inputValue, setInputValue] = React.useState("");
 
@@ -40,7 +34,7 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
       searchCityKeyMutation(inputValue);
     }, 600);
     return () => clearTimeout(timeoutId);
-  }, [inputValue, onChange]);
+  }, [searchCityKeyMutation, inputValue, onChange]);
 
   return (
     <Autocomplete
@@ -57,9 +51,13 @@ export const SearchAutocomplete: React.FC<SearchAutocompleteProps> = ({
         setOpen(false);
       }}
       isOptionEqualToValue={(option, value) =>
-        option.city === value.city && option.country === value.country
+        option.localizedName === value.localizedName &&
+        option.country.id === value.country.id &&
+        option.administrativeArea.id === value.administrativeArea.id
       }
-      getOptionLabel={(option) => `${option.country}, ${option.city}`}
+      getOptionLabel={(option) =>
+        `${option.country.localizedName}, ${option.administrativeArea.localizedName}, ${option.localizedName}`
+      }
       options={options}
       loading={isSearchCityKeyPending}
       renderInput={(params) => (
