@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/mosquito-forecast-ui/static/css/main.9a07f6de.css",
-    "main.js": "/mosquito-forecast-ui/static/js/main.2505333b.js",
+    "main.css": "/mosquito-forecast-ui/static/css/main.e6c13ad2.css",
+    "main.js": "/mosquito-forecast-ui/static/js/main.fd50f50f.js",
     "static/js/787.aadca95f.chunk.js": "/mosquito-forecast-ui/static/js/787.aadca95f.chunk.js",
     "index.html": "/mosquito-forecast-ui/index.html",
-    "main.9a07f6de.css.map": "/mosquito-forecast-ui/static/css/main.9a07f6de.css.map",
-    "main.2505333b.js.map": "/mosquito-forecast-ui/static/js/main.2505333b.js.map",
+    "main.e6c13ad2.css.map": "/mosquito-forecast-ui/static/css/main.e6c13ad2.css.map",
+    "main.fd50f50f.js.map": "/mosquito-forecast-ui/static/js/main.fd50f50f.js.map",
     "787.aadca95f.chunk.js.map": "/mosquito-forecast-ui/static/js/787.aadca95f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9a07f6de.css",
-    "static/js/main.2505333b.js"
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.fd50f50f.js"
   ]
 }
